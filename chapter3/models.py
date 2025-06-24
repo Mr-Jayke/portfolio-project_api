@@ -33,15 +33,13 @@ class Performance(Base):
     player=relationship("Player",back_populates="performaces")
 
 class League(Base):
-    __tablename__="team"
+    __tablename__="league"
 
-    team_id=Column(Integer,primary_key=True,index=True)
-    team_name=Column(String,nullable=False)
+    league_id=Column(Integer,primary_key=True,index=True)
+    league_name=Column(String,nullable=False)
+    scoring_type=Column(String,nullable=False)
     last_changed_date=Column(Date,nullable=False)
-
-    league_id=Column(Integer,ForeignKey("league.league_id"))
-
-    league=relationship("League",back_populates="teams")
+    teams=relationship("Team",back_populates="league")
 
 class Team(Base):
     __tablename__="team"
@@ -56,5 +54,10 @@ class Team(Base):
 
     player=relationship("Player",secondary="team_player",back_populates="teams")
 
-    class TeamPlayer(Base):
-        __tablename__="team_player"
+class TeamPlayer(Base):
+    __tablename__="team_player"
+
+    team_id=Column(Integer, ForeignKey("team.team_id"),primary_key=True, index=True)
+
+    player_id=Column(Integer,ForeignKey("player.player_id"),primary_key=True,index=True)
+    last_changed_date=Column(Date,nullable=False)
